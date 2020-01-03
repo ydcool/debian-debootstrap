@@ -12,7 +12,7 @@ addons:
 env:
     global:
         - QEMU_VER=v4.1.1-1
-        - DOCKER_REPO=multiarch/debian-debootstrap
+        - DOCKER_REPO=inspurcloud/debian-debootstrap
     matrix:
         - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=sid UNAME_ARCH=x86_64 VERSION=sid
         - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=sid UNAME_ARCH=arm64 VERSION=sid
@@ -57,7 +57,7 @@ script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
     - |
-      if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+      if [[ $TRAVIS_BRANCH == 'builder' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
           docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" && \
               docker push $DOCKER_REPO
       fi
